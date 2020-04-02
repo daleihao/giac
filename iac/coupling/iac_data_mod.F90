@@ -107,18 +107,16 @@ module iac_data_mod
   integer, parameter, public :: iac_cdatac_clm2gcam        =  2
   integer, parameter, public :: iac_cdatac_ibclmfile       =  3
   integer, parameter, public :: iac_cdatac_clmcbfndir      =  4
-  integer, parameter, public :: iac_cdatac_gcam2glm_basecrop= 5
-  integer, parameter, public :: iac_cdatac_gcam2glm_basepast= 6
-  integer, parameter, public :: iac_cdatac_gcam2glm_baseothr= 7
-  integer, parameter, public :: iac_cdatac_gcam2glm_glumap =  8
-  integer, parameter, public :: iac_cdatac_gcam2glm_basebiomass= 9
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_co2base2000 = 10
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_grid720x360 = 11
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_grid288x192 = 12
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_co2shipbase2000 = 13
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_lut720x360map = 14
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_downscaleinfo = 15
-  integer, parameter, public :: iac_cdatac_gcam2emisfile_rcp45allsteps = 16
+  integer, parameter, public :: iac_cdatac_gcam2glm_baselu= 5
+  integer, parameter, public :: iac_cdatac_gcam2glm_glumap =  6
+  integer, parameter, public :: iac_cdatac_gcam2glm_basebiomass= 7
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_co2base2000 = 8
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_grid720x360 = 9
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_grid288x192 = 10
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_co2shipbase2000 = 11
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_lut720x360map = 12
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_downscaleinfo = 13
+  integer, parameter, public :: iac_cdatac_gcam2emisfile_rcp45allsteps = 14
 
 
   !--- iofields ---
@@ -240,6 +238,7 @@ module iac_data_mod
   integer           , public :: iac_gcamo_forest
   integer           , public :: iac_gcamo_other
 
+! these may need to be updated to the new 31 regions
   integer           , public :: iac_gcamo_reg_usa
   integer           , public :: iac_gcamo_reg_canada
   integer           , public :: iac_gcamo_reg_western_europe
