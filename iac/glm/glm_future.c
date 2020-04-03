@@ -689,7 +689,7 @@ void initialize(){
   read_continent_codes();
   read_other_data();
   if (gridded_wh==0) 
-    initialize_woodharvest_country_ratios(2015);
+    initialize_woodharvest_country_ratios(2005);
 
   if(!initialrun) {
     read_restart_pointer(); 
