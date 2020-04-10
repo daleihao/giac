@@ -42,7 +42,7 @@ if ($LND_GRID =~ 0.9x1.25* ) then
   #set mksurfout_init = "surfdata.pftdyn_192x288_iESM112_simyear1850_c04232014.nc"
   # this is an older 2005 file, probably need a new one; the original is surfdata.pftdyn_192x288_iESM112_simyear2005_FC12Hist_c05292014
   set mksurfout_init = "surfdata.pftdyn_0.9x1.25_simyr2005_Expt1.2_c130808.nc"
-  set gcam2glm_baselu = "iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v2.nc"
+  set gcam2glm_baselu = "iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v3.nc"
   set gcam2glm_basebiomass = "iac/giac/glm/inputs/vba_LUH1format.nc"
   set gcam2glm_glumap = "iac/giac/glm/inputs/gcam2glm_mapping.csv"
 endif
@@ -64,7 +64,7 @@ if ($LND_GRID =~ halfdeg* ) then
   #set mksurfout_init = "surfdata.pftdyn_360x720_iESM112_simyear1850_c04022014.nc"
   # this is old 2005 file? need one for 2015 start?
   set mksurfout_init = "surfdata_iESM_ZGICN24a_2006to2005a.nc"
-  set gcam2glm_baselu = "iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v2.nc"
+  set gcam2glm_baselu = "iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v3.nc"
   set gcam2glm_basebiomass = "iac/giac/glm/inputs/vba_LUH1format.nc"
   set gcam2glm_glumap = "iac/giac/glm/inputs/gcam2glm_mapping.csv"
 endif
@@ -230,7 +230,7 @@ shiftcult_map  = inputs/other/shift_cult/shiftcult_LUH1format.txt
 regcodes_map     = inputs/other/wood_harvest/gcam_region_grid.txt # this is not used, and is the same as above
 gcodes_cont_map  = inputs/other/ccodes/gcodes_continent_half_deg_DUMMY.asc
 miami_biomass_file_vba = inputs/other/miami_biomass_v3/vba_LUH1format.txt
-miami_biomass_file_vnppa = inputs/other/miami_npp/npp_LUH1format.txt
+miami_biomass_file_vnppa = inputs/other/miami_npp/npp_LUH1format_v2.txt
 
 [debug options]
 smart_flow_bug_print         = 1

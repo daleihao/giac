@@ -1,0 +1,274 @@
+# these are updated iesm namelist items for the LUT, gcam2glm, and glm
+# these have been extracted from giac.template to reflect updates for e3sm v2
+# other namelist items from giac.template may still be very relevant, while others may not
+# I am assuming that 0.9x1.25 is the only available iesm grid
+# giac.template is based on the original clm.buildnml.csh that was called during build to generate namelists and initial files
+
+# for now I am assuming the same inputdata structure for iesm files
+# there are four directories within $DIN_LOC_ROOT/iac/giac
+# gcam, glm, glm2iac, iac2gcam
+# iac2gcam holds mainly the elm to gcam mapping file and the baseline file for scalars, but with this now being in the gcam code the files may be elsewhere?
+# glm2iac holds mainly LUT files
+# gcam and glm hold their respective input files
+# further description of the input file tree is shown below for individual files
+
+# at the end of this file is the list of updated files and their location
+
+
+## these are current namelist items
+
+# new elm to gcam mapping file, original location (this may already be included in the gcam namelist and may now go somewhere else)
+clm2gcam_mapfile = "\$DIN_LOC_ROOT/iac/giac/iac2gcam/elm0.9x1.25togcam_mapping.csv"
+
+# this replaces gcam2glm_basecrop, gcam2glm_basepast, and gcam2glm_baseothr
+gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v2.nc"
+
+# these are just new files (although gcam2glm_glumap used to be called gcam2glm_aezmap)
+gcam2glm_basebiomass = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/vba_LUH1format.nc"
+gcam2glm_glumap = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/gcam2glm_mapping.csv"
+
+# I don't think this is used; it points to some model outputs and might have been for baseline scalars
+# The baseline scalar file is created separately and has its own namelist item
+clmC_bfn_dir
+
+
+## shell command to create the glm input config file
+
+# glm reads in a configuration file from the run directory
+# even though not all of the included files are used, the code expects them
+# this is how this input files was constructed, but with updated values
+
+cat >! glm.fut.conf <<EOF
+[old control]
+hist_option       = 2
+trun              = tone
+cat3              = inputs/other/
+cat5              = inputs/hyde_3.0/half_deg_grids/
+cat6              = inputs/future/RCP_MiniCam/
+foutput_dir        = output/
+
+[control]
+top level glm dir = \$DIN_LOC_ROOT/iac/giac/glm/
+case name         = output
+runtype           = initial   # initial or restart
+start year        = 2015
+stop year         = 2100
+output_text         = 0         # write out text state and lu
+output_netcdf       = 1         # write out netcdf state and lu
+input_text_files    = 0         # read in txt wood harvest files
+input_netcdf_files  = 1         # read in netcdf wood harvest files
+use_urban           = 0       # 1[Y] or 0[N]
+res option          = 2       # 1 (1 degree) or 2 (0.5 degree) only option 2 is valid
+number of countries = 192
+future rate option  = 0       # HIST(0) | GCAM(3) | AIM(4) | IMAGE(5) | MESSAGE(6)
+future scenario     = 0       # HIST(0) | GCAM(3) | AIM(4) | IMAGE(5) | MESSAGE(6)
+num_regions         = 31      # HIST=0,GCAM=14,AIM=24,IMAGE=24,MESSAGE=24
+gridded_woodharvest = 2       # HIST=0,GCAM=0,AIM=1,IMAGE=0,MESSAGE=1,GCAM_AEZ=2
+logging_option      = 1       #  0=wh=zero,1=standard wh data, 4="nodata"
+zdis_option         = 1       # option for algorithm for spatial allocation of wood harvest
+                              # only option 1 is supported in this version
+
+#priority for clearing and wood harvest
+smart_flow_option        = 1       # primary(1) or secondary(2)
+
+#agricultural residence option
+#minimum flows only or 
+#shifting cultivation within the locations defined by our SC map
+adjust_smart_flow_option = 5  # minimum(1) or shifting(5)
+
+# choose whether clearing for agriculture is counted 
+# towards meeting wood harvest demand Y(2) or not N(1)
+converted_forest_land_option  = 1 
+
+#historical land-use dataset = HYDE         # HYDE or No-Data
+nodata_option = 5                           # 5=HYDE3 or 6=No-Data
+
+maxz                         = 21       # Maximum z before we get tired, and spread remaining harvest over all forested cells with z >= this value
+best_case                    = 1        # 1= best case, 0= other case
+best_case_min_flows_t5       = 1
+best_case_min_flows_t4       = 0
+total_harvest_switch         = 1
+secondary_harvest_switch     = 1
+virgin_harvest_switch        = 1
+force_harvest_switch         = 1
+cpavg                        = 1
+tb2bb                        = 1.0     # total biomass to bole biomass ratio, value of 2.0 assumes the WH numbers are bole biomass only 
+                                       # and we need to cut twice as much biomass  */
+
+phbio_filename               =  inputs/other/phbio.average.7states.txt
+phbio_length                 =  50    # filelength of probability of harvest given biomass
+
+output_updated_states        = 1	# these five lines are not even read-in
+output_updated_states2       = 0
+output_updated_states3       = 0
+output_lu                    = 1
+country_primeflow_print      = 1
+
+#glm.future options
+region_test_tmp              = 0
+region_test_gcode            = 11
+region_test_index            = 6
+conterminous                  = 0
+
+
+
+[output_files]
+static_regions_file=static_regions_file.txt
+static_vba_file=static_vba_file.txt
+
+[output directory]
+output dir = $exedir
+
+[hyde_datasets]
+
+hyde_crop_path = \$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gcrop_1500-2005.nc
+hyde_othr_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gothr_1500-2005.nc
+hyde_past_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gpast_1500-2005.nc
+hyde_watr_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gwatr_850_851_half_degree.nc
+hyde_icew_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gicew_850_851_half_degree.nc
+
+[hyde_datasets_nodata]
+
+crop_nodata_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/nodata/gcrop_1500-1510.nc
+other_nodata_path =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/nodata/gothr_1500-1510.nc
+past_nodata_path  =\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/nodata/gpast_1500-1510.nc
+
+[future_datasets]
+
+future_crop_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/GCAM_Expt1_constructed_states_2005-2100/gcrop.2005-2100.nc
+future_secd_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/GCAM_Expt1_constructed_states_2005-2100/gsecd.2005-2100.nc
+future_othr_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/GCAM_Expt1_constructed_states_2005-2100/gothr.2005-2100.nc
+future_past_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/GCAM_Expt1_constructed_states_2005-2100/gpast.2005-2100.nc
+future_watr_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gwatr_850_851_half_degree.nc
+future_icew_constructed_states = \$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gicew_850_851_half_degree.nc
+updated_initial_state = \$DIN_LOC_ROOT/iac/giac/glm/inputs/initial/initial_state_LUH2_2015_v3.nc
+
+[woodharvest_datasets]
+woodharvest_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/woodharvest_1500-2005.nc
+woodharvest_nodata_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/woodharvest_nodata_1500-2005.nc
+rcp_woodharvest_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/RCP/woodharvest_minicam_rcp_2005_2100.nc
+rcp_woodharvest_nodata_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/RCP/woodharvest_minicam_rcp_2005_2100.nc
+rcp_woodharvest_aez_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/RCP/woodharvest_rcp45_aez_nd_2005_2100.nc
+rcp_woodharvest_nodata_aez_file =\$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/RCP/woodharvest_rcp45_aez_nd_2005_2100.nc
+
+[other_datasets]
+wh_region_codes_file   = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_codes.txt
+wh_cont2region_codes_file = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/continent_codes_region.txt
+whcodes2glm_map  = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/reg2ctry_mapping.txt
+aez_region_grid_file = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_grid.txt
+aez_region_zone_file = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_zone_grid.txt
+
+cellinfo_file  = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/cellarea/cellarea_halfdeg.txt
+ccodes_file    = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/ccodes.txt.sort2wh
+ccodes_map     = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/ccodes_half_deg.txt
+cnames_file    = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/cnames.txt.sort2wh
+regnames_file  = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_names.txt
+contcodes_file = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/new_continent.codes.txt.sort2wh
+shiftcult_map  = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/shift_cult/shiftcult_LUH1format.txt
+regcodes_map     = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_grid.txt # this is not used, and is the same as above
+gcodes_cont_map  = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/gcodes_continent_half_deg_DUMMY.asc
+miami_biomass_file_vba = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/miami_biomass_v3/vba_LUH1format.txt
+miami_biomass_file_vnppa = \$DIN_LOC_ROOT/iac/giac/glm/inputs/other/miami_npp/npp_LUH1format_v2.txt
+
+[debug options]
+smart_flow_bug_print         = 1
+state_print                  = 0
+state_bug_print              = 1
+flow_bug_print               = 1
+
+EOF
+
+
+## this is how the glm config file is modified if continuation run
+# I didn't inlucde the gcam lines because they might have changed
+
+if (\${CONTINUE_RUN} == TRUE) then
+
+#2 change runtype in glm config file
+   sed -i 's/runtype.*/runtype    =    restart/' glm.fut.conf
+
+else
+#2 change runtype in glm config file
+   sed -i 's/runtype.*/runtype    =    initial/' glm.fut.conf
+
+endif
+
+
+## this is an initial clm-style dynamic pft file that is then copied/renamed and updated by the iesm-mksurfdat functions
+# the new landuse.timeseries files have additional and slightly different variables
+# this initial file can be created by extracting the final year from the historical landuse.timeseries file
+# it is copied and renamed before being added to the namelist as fdyndat
+# definitely need to modify iesm mksurfdat.F90 and some other files to deal with the different variables
+mksurfout_init = "\$DIN_LOC_ROOT/iac/giac/glm2iacsurfdata.pftdyn_0.9x1.25_simyr2005_Expt1.2_c130808.nc"
+
+
+## these are the original shell commands for the LUT files
+# some namelist suggestions follow; if these become namelist items, is there another mechanism to copy them to the $RUNDIR?
+# copying to generic names in the $RUNDIR is currently required as the LUT either adds to these files or doesn't know the exact file name
+# probably don't need 1850 initial files or 2000 reference files any more as the LUT can now generate the historical timeseries for input to a regular E3SM run
+
+# for glm2iac
+set giactop = \$DIN_LOC_ROOT/iac/giac
+set mksurfin = mksurf_landuse_iESM_720x360.nc
+set mksurfout = surfdata_iESM
+cp -f \$giactop/glm2iac/pftregridparams.txt .
+cp -f \$giactop/glm2iac/surfdata_360x720_potveg.nc .
+cp -f \$giactop/glm2iac/mksrf_landuse_ingrid.nc ./\$mksurfin
+# these are the files for starting in 2015
+cp -f $giactop/glm2iac/iESM_Ref_CropPast2015_c10142019.nc ./iESM_Init_CropPast.nc
+cp -f $giactop/glm2iac/surfdata_360x720_mcrop2015_c10142019.nc ./surfdata_360x720_mcrop_init.nc
+
+if (${CONTINUE_RUN} == FALSE) then
+    cp -f $giactop/glm2iac/${mksurfout_init} ${mksurfout}_dyn.nc
+    cp -f ./iESM_Init_CropPast.nc ./iESM_Dyn_CropPast.nc
+    cp -f ./surfdata_360x720_mcrop_init.nc ./surfdata_360x720_mcrop_dyn.nc
+endif
+chmod 666 ./iESM_Dyn_CropPast.nc  ./surfdata_360x720_mcrop_dyn.nc ./iESM_Init_CropPast.nc ./surfdata_360x720_mcrop_init.nc surfdata_360x720_potveg.nc  ${mksurfout}_dyn.nc ./iESM_Ref_CropPast2000.nc ./surfdata_360x720_mcrop2000.nc
+
+# suggested namelist items for the LUT files, but they still need the manipulation above
+glm2iac_pftparams = "\$DIN_LOC_ROOT/iac/giac/glm2iac/pftregridparams.txt"
+glm2iac_potveg = "\$DIN_LOC_ROOT/iac/giac/glm2iac/surfdata_360x720_potveg.nc"
+glm2iac_landuse_init = "\$DIN_LOC_ROOT/iac/giac/glm2iac/iESM_Ref_CropPast2015_c10142019.nc"
+glm2iac_surface_init = "\$DIN_LOC_ROOT/iac/giac/glm2iac/surfdata_360x720_mcrop2015_c10142019.nc"
+
+
+## some related namelist settings
+
+set initrun = '.true.'
+if (\$CONTINUE_RUN == 'TRUE') set initrun = '.false.'
+
+initial_run = \$initrun
+
+# we know that we want this to be mksurf_landuse_iESM_720x360.nc in $RUNDIR, but the actual filename is mksrf_landuse_ingrid.nc in .../glm2iac/
+mksrf_fdynuse  = '\$mksurfin'
+ 
+fsurdat        = '\${mksurfout}.nc'
+fsurlog        = '\${mksurfout}.log'
+fdyndat        = '\${mksurfout}_dyn.nc '
+
+##### list of updated files
+
+# existing namelist items
+clm2gcam_mapfile = "\$DIN_LOC_ROOT/iac/giac/iac2gcam/elm0.9x1.25togcam_mapping.csv"
+gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v3.nc"
+gcam2glm_basebiomass = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/vba_LUH1format.nc"
+gcam2glm_glumap = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/gcam2glm_mapping.csv"
+
+# glm2iac files
+$DIN_LOC_ROOT/iac/giac/glm2iac/iESM_Ref_CropPast2015_c10142019.nc
+$DIN_LOC_ROOT/iac/giac/glm2iac/surfdata_360x720_mcrop2015_c10142019.nc
+
+# glm files
+$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gwatr_850_851_half_degree.nc
+$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/gicew_850_851_half_degree.nc
+$DIN_LOC_ROOT/iac/giac/glm/inputs/initial/initial_state_LUH2_2015_v3.nc
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_codes.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/continent_codes_region.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/reg2ctry_mapping.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_grid.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_zone_grid.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/wood_harvest/gcam_region_names.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/ccodes/new_continent.codes.txt.sort2wh
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/shift_cult/shiftcult_LUH1format.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/miami_biomass_v3/vba_LUH1format.txt
+$DIN_LOC_ROOT/iac/giac/glm/inputs/other/miami_npp/npp_LUH1format_v2.txt
