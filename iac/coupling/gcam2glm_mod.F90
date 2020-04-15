@@ -1412,8 +1412,8 @@ contains
 ! into timelevel n to calculate the next set of years.
 ! this should always be true now that gcam is at annual time step
     if (eclockyr==year2) then 
-       glm_crop(:,n)=glm_crop(:,np1)
-       glm_past(:,n)=glm_past(:,np1)
+       glm_crop(:,:,n)=glm_crop(:,:,np1)
+       glm_past(:,:,n)=glm_past(:,:,np1)
        gcam_wh(:,n)=gcam_wh(:,np1)
        gcam_forest_area(:,n)=gcam_forest_area(:,np1)
     end if
