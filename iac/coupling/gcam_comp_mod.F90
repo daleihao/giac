@@ -164,9 +164,9 @@ contains
     allocate(gcamoemis(iac_gcamoemis_nemis,cdata%i(iac_cdatai_gcamoemis_size)))
     
     ! create CCSM_GCAM_interface Object 
-    call initCCSMInterface()
+    call inite3sminterface()
     
-    ! Call initcGCAM method of CCSM/GCAM Interface 
+    ! Call initcGCAM method of e3sm/GCAM Interface 
     call initcGCAM()
     
   end subroutine gcam_init_mod
@@ -306,7 +306,7 @@ contains
   call finalizecGCAM()
 
   !  Cleanup CCSM Interface Object 
-  call deleteCCSMInterface()
+  call deletee3sminterface()
 
   end subroutine gcam_final_mod
 
