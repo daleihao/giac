@@ -21,7 +21,7 @@
 clm2gcam_mapfile = "\$DIN_LOC_ROOT/iac/giac/iac2gcam/elm0.9x1.25togcam_mapping.csv"
 
 # this replaces gcam2glm_basecrop, gcam2glm_basepast, and gcam2glm_baseothr
-gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v2.nc"
+gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/initial/initial_state_LUH2_2015_v3.nc"
 
 # these are just new files (although gcam2glm_glumap used to be called gcam2glm_aezmap)
 gcam2glm_basebiomass = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/vba_LUH1format.nc"
