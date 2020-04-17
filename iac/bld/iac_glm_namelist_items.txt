@@ -250,7 +250,7 @@ fdyndat        = '\${mksurfout}_dyn.nc '
 
 # existing namelist items
 clm2gcam_mapfile = "\$DIN_LOC_ROOT/iac/giac/iac2gcam/elm0.9x1.25togcam_mapping.csv"
-gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/hyde_3.0/half_deg_grids/initial_state_LUH2_2015_v3.nc"
+gcam2glm_baselu = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/initial/initial_state_LUH2_2015_v3.nc"
 gcam2glm_basebiomass = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/vba_LUH1format.nc"
 gcam2glm_glumap = "\$DIN_LOC_ROOT/iac/giac/glm/inputs/gcam2glm_mapping.csv"
 
