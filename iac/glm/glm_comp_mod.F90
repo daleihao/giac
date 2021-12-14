@@ -76,8 +76,6 @@ contains
     numglu = num_gcam_land_regions
 
 
-    cdata%l(iac_cdatal_glm_present) = .true.
-    cdata%l(iac_cdatal_glm_prognostic) = .true.
     cdata%i(iac_cdatai_glm_nx) = iac_glm_nx
     cdata%i(iac_cdatai_glm_ny) = iac_glm_ny
     cdata%i(iac_cdatai_glm_size) = iac_glm_nx * iac_glm_ny
@@ -116,7 +114,6 @@ contains
     real*8, pointer :: glmo(:,:)
 
 ! !LOCAL VARIABLES:
-    logical :: restart_now
     integer :: ymd, tod, dt
     integer :: i,j,ij,n,ni
     integer :: glmyear,e3smyear
@@ -128,8 +125,6 @@ contains
 
 !EOP
 !-----------------------------------------------------------------------
-
-    restart_now = cdata%l(iac_cdatal_rest)
 
     ymd = EClock(iac_EClock_ymd)
     tod = EClock(iac_EClock_tod)

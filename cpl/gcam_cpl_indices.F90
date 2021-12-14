@@ -148,10 +148,8 @@ contains
     call mct_aVect_init(z2x, rList=seq_flds_z2x_fields, lsize=1)
     nflds_z2x = mct_avect_nRattr(z2x)
 
-    ! KVC NOTE: iac_ctl%npft is not set at this point, setting it now
     ! Loop over pfts and get a tag to concat with
     ! avd - tried setting this in iac_init
-    !iac_ctl%npft=17
     do p=1,iac_ctl%npft
        ! We zero-offset the names, with 0 being bare ground, so tag with p-1
        write(pftstr,'(I0)') p-1

@@ -269,8 +269,7 @@ contains
 
 
     ! !LOCAL VARIABLES:
-    logical :: restart_run,lexist
-    logical :: initial_run
+    logical :: lexist
     integer :: iun,tmpyears(2),tmp(1),ii,n,nn,maxlonlat(2)
     integer       ::i,j,idx2000,idx2005,idx2080,idx2090,idx2100,mth
     integer, dimension(2) :: start2,count2
@@ -307,12 +306,6 @@ contains
 #ifdef DEBUG
     write(iulog,*) subname,' starting subroutine '
 #endif
-
-    restart_run  = cdata%l(iac_cdatal_rest)
-    !    gcamsize = cdata%i(iac_cdatai_gcam_naez)*cdata%i(iac_cdatai_gcam_nreg)
-    initial_run = cdata%l(iac_cdatal_initrun)
-    !    gcam2emis_co2base2000 = trim(cdata%c(iac_cdatac_gcam2emis_co2base2000))
-    !    gcam2emis_halfdeg_mapping = trim(cdata%c(iac_cdatac_gcam2emis_lut_0.5deg_mapping))
 
     base2000yrco2file=trim(cdata%c(iac_cdatac_gcam2emisfile_co2base2000))
     grid720x360=trim(cdata%c(iac_cdatac_gcam2emisfile_grid720x360))

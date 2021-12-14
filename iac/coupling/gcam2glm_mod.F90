@@ -130,8 +130,7 @@ contains
 ! !ARGUMENTS:
 
 ! !LOCAL VARIABLES:
-    logical :: restart_run,lexist
-    logical :: initial_run
+    logical :: lexist
     integer :: iun,tmpyears(2),ier
     character(len=*),parameter :: subname='(gcam2glm_init_mod)'
 
@@ -151,13 +150,10 @@ contains
 #ifdef DEBUG
      write(iulog,*) subname,' starting subroutine '
 #endif
-    restart_run  = cdata%l(iac_cdatal_rest)
-
     nregions=num_gcam_energy_regions
     nglu=num_gcam_land_regions
 
     gcamsize=nglu
-    initial_run = cdata%l(iac_cdatal_initrun)
 
 ! initialize two level time indexes 
 
@@ -382,9 +378,9 @@ contains
     pot_veg=pot_veg*0.75
     pctland_in2015(:,:) = 0.
     pctland_in2015=hydeGCROP2015+hydeGPAST2015+hydeGOTHR2015
-! KVC: Temp -- set this to false. 
-restart_run = .false.
-    if (.not.restart_run) then
+
+    if (nsrest == nsrStartup .or. nsrest == nsrBranch) then
+       ! if this is not a restart run, need to set variables direclty
        glm_crop(:,:,1)=hydeGCROP2015;
        glm_past(:,:,1)=hydeGPAST2015;
 
@@ -483,7 +479,7 @@ restart_run = .false.
     integer :: row,g,t,y
     integer :: iun,iyr,ier
     integer :: ymd, tod, dt,naez,nreg,ii,year,mon,day
-    logical :: restart_now,gcam_alarm
+    logical :: gcam_alarm
     real(r8)  :: crop_d,past_d,crop_neg,crop_pos,past_neg,past_pos,farea_d,v
     real(r8)  :: gcam_crop_tmp(2,18,14),gcam_past_tmp(2,18,14),gcam_forest_area_tmp(2,18,14)
     real(r8)  :: fact1,fact2,eclockyr,fact1yrm1, fact2yrm1,delyr,eclockyrm1

@@ -277,8 +277,8 @@ contains
 ! Run interface for gcam
 
 ! !USES:
-   use iac_data_mod, only : iac_spval, iac_cdatal_rest, iac_cdatai_logunit
-   use iac_data_mod, only : iac_eclock_ymd, iac_eclock_tod, iac_eclock_dt, iac_cdatal_rest
+   use iac_data_mod, only : iac_spval, iac_cdatai_logunit
+   use iac_data_mod, only : iac_eclock_ymd, iac_eclock_tod, iac_eclock_dt
     implicit none
 
 ! !ARGUMENTS:
@@ -322,7 +322,6 @@ contains
     real*8, pointer :: gcamoco2airhidec(:,:)  ! gcam output for eam, needs to be passed through coupler
     
 ! !LOCAL VARIABLES:
-    logical :: restart_now
     integer :: ymd, tod, dt
     integer :: i,j,w
     character(len=*),parameter :: subname='(gcam_run_mod)'
@@ -337,8 +336,6 @@ contains
 
     gcamo = iac_spval
     gcamoemis = iac_spval
-    
-  restart_now = cdata%l(iac_cdatal_rest)
 
   ymd = EClock(iac_eclock_ymd)
   tod = EClock(iac_eclock_tod)
@@ -389,8 +386,8 @@ contains
 ! Setdensity interface for gcam
 
 ! !USES:
-   use iac_data_mod, only : iac_spval, iac_cdatal_rest, iac_cdatai_logunit
-   use iac_data_mod, only : iac_eclock_ymd, iac_eclock_tod, iac_eclock_dt, iac_cdatal_rest
+   use iac_data_mod, only : iac_spval, iac_cdatai_logunit
+   use iac_data_mod, only : iac_eclock_ymd, iac_eclock_tod, iac_eclock_dt
    use iac_data_mod, only : iac_first_coupled_year
    use iso_c_binding
     implicit none
@@ -399,7 +396,6 @@ contains
     type(lnd2iac_type), intent(in) :: lnd2iac_vars
 
 ! !LOCAL VARIABLES:
-    logical :: restart_now
     integer :: ymd, tod, dt, yyyymmdd
     integer :: i,j,r,w,len
     character(len=*),parameter :: subname='(gcam_setdensity_mod)'
@@ -411,8 +407,6 @@ contains
 
 !EOP
 !-----------------------------------------------------------------------
-
-  restart_now = cdata%l(iac_cdatal_rest)
 
   ymd = EClock(iac_eclock_ymd)
   tod = EClock(iac_eclock_tod)

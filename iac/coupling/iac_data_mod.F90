@@ -132,13 +132,6 @@ module iac_data_mod
   integer, parameter, public :: iac_cdatai_gcam_yr1        =  8
   integer, parameter, public :: iac_cdatai_gcam_yr2        =  9
 
-  !--- logicals ---
-! KVC: below is used in restart and other logic, but isn't working right yet
-  integer, parameter, public :: iac_cdatal_rest            =  1
-  integer, parameter, public :: iac_cdatal_glm_present     =  4
-  integer, parameter, public :: iac_cdatal_glm_prognostic  =  5
-  integer, parameter, public :: iac_cdatal_initrun         =  10
-
   ! indices used to unpack gcamo
   integer           , public :: iac_gcamo_crop = 6
   integer           , public :: iac_gcamo_pasture = 5
