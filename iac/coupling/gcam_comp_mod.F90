@@ -360,7 +360,7 @@ contains
     
 ! !LOCAL VARIABLES:
     integer :: ymd, tod, dt
-    integer :: i,j,wc,gs,cs,rs,ws,rr,ays
+    integer :: i,j,wc,gs,cs,rs,ws,rr,ays,use_gcam_usa_int
     character(len=256) :: elm2gcam_co2_mapping_file_loc 
     character(len=256) :: elm2gcam_luc_mapping_file_loc
     character(len=256) :: base_npp_file_loc
@@ -452,6 +452,12 @@ contains
         wc = 0
      end if
 
+     if ( use_gcam_usa ) then
+        use_gcam_usa_int = 1
+     else
+        use_gcam_usa_int = 0
+     end if
+
      call downscaleemissionscgcam(gcamoemis, gcamoco2sfcjan, gcamoco2sfcfeb, &
           gcamoco2sfcmar, gcamoco2sfcapr, gcamoco2sfcmay, gcamoco2sfcjun,     &
           gcamoco2sfcjul, gcamoco2sfcaug, gcamoco2sfcsep, gcamoco2sfcoct,     &
@@ -469,7 +475,7 @@ contains
           pop_gcam_file, gdp_gcam_file, co2_gcam_file,                        &
 	  num_gcam_energy_regions, num_emiss_ctys, num_emiss_sectors, num_periods,  &
           num_lon, num_lat, wc, ymd,                                          &
-          surface_co2_downscaling_method, use_gcam_usa)
+          surface_co2_downscaling_method, use_gcam_usa_int)
 
   end if
 
